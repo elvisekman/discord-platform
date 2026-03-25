@@ -12,15 +12,15 @@ services:
     depends_on:
       - zookeeper
     ports:
-      - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
     healthcheck:
-      test: ["CMD", "bash", "-c", "nc -zv localhost 9092"]
+      test: ["CMD", "bash", "-c", "nc -zv localhost 29092"]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -30,17 +30,31 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-    entrypoint: /bin/bash -c "kafka-topics --create --if-not-exists --bootstrap-server kafka:9092 --topic discord.voice --partitions 3 --replication-factor 1"
+    entrypoint: /bin/bash -c "kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --topic discord.voice --partitions 3 --replication-factor 1"
 
   discord-gateway:
     build:
       context: ./services/discord-gateway
     environment:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       JAVA_OPTS: ${JAVA_OPTS:-}
     ports:
       - "8080:8080"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+
+  voice-service:
+    build:
+      context: ./services/voice-service
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      JAVA_OPTS: ${JAVA_OPTS:-}
+    ports:
+      - "8081:8080"
     depends_on:
       kafka:
         condition: service_healthy
