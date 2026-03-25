@@ -11,21 +11,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DiscordConfig {
 
-    @Value("${discord.bot.token}")
-    private String botToken;
+  @Value("${discord.bot.token}")
+  private String botToken;
 
-    @Bean
-    public JDA jda(DiscordEventListener listener) throws InterruptedException {
-        return JDABuilder.createDefault(botToken)
-                .enableIntents(
-                        GatewayIntent.GUILD_VOICE_STATES,
-                        GatewayIntent.GUILD_MEMBERS,
-                        GatewayIntent.GUILD_PRESENCES,
-                        GatewayIntent.GUILD_MESSAGES,
-                        GatewayIntent.MESSAGE_CONTENT
-                )
-                .addEventListeners(listener)
-                .build()
-                .awaitReady();
-    }
+  @Bean
+  public JDA jda(DiscordEventListener listener) throws InterruptedException {
+    return JDABuilder.createDefault(botToken)
+        .enableIntents(
+            GatewayIntent.GUILD_VOICE_STATES,
+            GatewayIntent.GUILD_MEMBERS)
+        .addEventListeners(listener)
+        .build()
+        .awaitReady();
+  }
 }
