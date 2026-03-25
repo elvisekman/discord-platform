@@ -1,0 +1,43 @@
+plan.md
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# IDE – IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# IDE – VS Code
+.vscode/
+*.code-workspace
+
+# Java / Maven
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Spring Boot dev tools restart trigger
+.spring-boot-devtools.properties
+
+# jenv & SDKMAN local version files
+.java-version
+.sdkmanrc
+
+# Docker
+docker-compose.override.yml
+
+# Kubernetes secrets (never commit these)
+**/secrets.yml
+**/secret.yml
+**/secrets.yaml
+**/secret.yaml
