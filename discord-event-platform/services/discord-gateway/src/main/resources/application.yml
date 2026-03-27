@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: discord-gateway
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      properties:
+        retry.backoff.ms: 1000
+
+discord:
+  bot:
+    token: ${DISCORD_BOT_TOKEN}
+  kafka:
+    topics:
+      voice: ${DISCORD_VOICE_TOPIC:discord.voice}
+      game-started: ${DISCORD_GAME_STARTED_TOPIC:discord.game.started}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.discordbuddy.gateway: INFO
+    net.dv8tion.jda: WARN
