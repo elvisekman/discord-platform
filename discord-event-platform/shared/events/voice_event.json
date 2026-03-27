@@ -1,0 +1,7 @@
+{
+  "event_type": "VOICE_STATE_UPDATE",
+  "user_id": "string",
+  "channel_id": "string",
+  "guild_id": "string",
+  "timestamp": "datetime"
+}

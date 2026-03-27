@@ -17,6 +17,7 @@ discord:
   kafka:
     topics:
       voice: ${DISCORD_VOICE_TOPIC:discord.voice}
+      game-started: ${DISCORD_GAME_STARTED_TOPIC:discord.game.started}
 
 management:
   endpoints:
